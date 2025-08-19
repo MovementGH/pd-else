@@ -391,13 +391,21 @@ class AtomicQueue2 : public AtomicQueueCommon<AtomicQueue2<T, SIZE, MINIMIZE_CON
 
     T do_pop(unsigned tail) noexcept {
         unsigned index = details::remap_index<SHUFFLE_BITS>(tail % size_);
+#ifdef PDL2ORK
+        return Base::do_pop_any(states_[index], elements_[index]);
+#else
         return Base::template do_pop_any(states_[index], elements_[index]);
+#endif
     }
 
     template<class U>
     void do_push(U&& element, unsigned head) noexcept {
         unsigned index = details::remap_index<SHUFFLE_BITS>(head % size_);
+#ifdef PDL2ORK
+        Base::do_push_any(std::forward<U>(element), states_[index], elements_[index]);
+#else
         Base::template do_push_any(std::forward<U>(element), states_[index], elements_[index]);
+#endif
     }
 
 public:
@@ -519,13 +527,21 @@ class AtomicQueueB2 : public AtomicQueueCommon<AtomicQueueB2<T, A, MAXIMIZE_THRO
 
     T do_pop(unsigned tail) noexcept {
         unsigned index = details::remap_index<SHUFFLE_BITS>(tail & (size_ - 1));
+#ifdef PDL2ORK
+        return Base::do_pop_any(states_[index], elements_[index]);
+#else
         return Base::template do_pop_any(states_[index], elements_[index]);
+#endif
     }
 
     template<class U>
     void do_push(U&& element, unsigned head) noexcept {
         unsigned index = details::remap_index<SHUFFLE_BITS>(head & (size_ - 1));
+#ifdef PDL2ORK
+        Base::do_push_any(std::forward<U>(element), states_[index], elements_[index]);
+#else
         Base::template do_push_any(std::forward<U>(element), states_[index], elements_[index]);
+#endif
     }
 
 public:

@@ -36,6 +36,15 @@ static inline void spin_loop_pause() noexcept {
 #endif
 }
 } // namespace atomic_queue
+#elif defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+namespace atomic_queue {
+constexpr int CACHE_LINE_SIZE = 64;
+static inline void spin_loop_pause() noexcept {
+    // Yield to allow other pthreads in WebAssembly to run.
+    emscripten_sleep(0);
+}
+} // namespace atomic_queue
 #else
 #error "Unknown CPU architecture."
 #endif

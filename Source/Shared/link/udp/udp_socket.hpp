@@ -11,7 +11,9 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #undef min
+#ifndef PDL2ORK
 typedef SSIZE_T ssize_t;
+#endif
 // Unix
 #else
 #include <sys/types.h>

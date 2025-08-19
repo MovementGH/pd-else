@@ -17,7 +17,7 @@ elif [[ "$OS" == "Linux" ]]; then
         ffmpeg_config="--enable-openssl --enable-pic"
         ffmpeg_cc="${CC:-gcc}"
     fi
-elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]; then
+elif [ "$(expr substr $(uname -s) 1 5)" == "MINGW" ]; then
     ffmpeg_cc="${CC:-gcc}"
 else
     echo "Unsupported OS: $OS"
