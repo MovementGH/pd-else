@@ -29,6 +29,7 @@ if(WIN32)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -static-libgcc -static-libstdc++")
 endif()
 
+option(FORCE_FIND_LIBRARY "Forcibly use find_library even on macos to find libraries" OFF)
 option(ENABLE_OPUS "Enable opus for pdlink~ stream compression" ON)
 if(!ENABLE_OPUS)
   add_compile_definitions(ENABLE_OPUS=0)
@@ -82,7 +83,7 @@ foreach(file ${else_sources})
 
     # If target is streamout_tilde, add static libogg and libvorbis linking on macOS
     if(${target_name} STREQUAL "streamout_tilde")
-        if(APPLE)
+        if(APPLE AND NOT FORCE_FIND_LIBRARY)
             set(OGG_STATIC_LIB "/opt/homebrew/lib/libogg.a")
             set(VORBIS_STATIC_LIB "/opt/homebrew/lib/libvorbis.a")
             set(VORBISENC_STATIC_LIB "/opt/homebrew/lib/libvorbisenc.a")
